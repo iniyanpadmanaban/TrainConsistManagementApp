@@ -1,86 +1,68 @@
+/**
+ * ========================================================
+ * MAIN CLASS - UseCase4TrainConsistMgmnt
+ * ========================================================
+ *
+ * Use Case 4: Maintain Ordered Bogie Consist
+ *
+ * Description:
+ * This class models the physical chaining of train bogies
+ * using LinkedList for ordered operations.
+ *
+ * At this stage, the application:
+ * - Adds bogies in sequence
+ * - Inserts bogies at specific positions
+ * - Removes bogies from front and rear
+ * - Displays updated train structure
+ *
+ * This maps positional operations using LinkedList.
+ *
+ * @author Developer
+ * @version 4.0
+ */
+
+import java.util.LinkedList;
+import java.util.List;
+
 public class TrainConsistManagementApp {
 
-    // ─────────────────────────────────────────
-    // UC15: Custom Runtime Exception
-    // ─────────────────────────────────────────
-    static class CargoSafetyException extends RuntimeException {
-        CargoSafetyException(String message) {
-            super(message);
-        }
-    }
-
-    // ─────────────────────────────────────────
-    // GoodsBogie with cargo assignment rule
-    // Rule: Rectangular cannot carry Petroleum
-    // ─────────────────────────────────────────
-    static class GoodsBogie {
-        String shape;
-        String cargo;
-
-        GoodsBogie(String shape) {
-            this.shape = shape;
-            this.cargo = null;
-        }
-
-        void assignCargo(String cargo) {
-            if (shape.equals("Rectangular") &&
-                    cargo.equals("Petroleum")) {
-                throw new CargoSafetyException(
-                        "Unsafe: Petroleum cannot be assigned " +
-                                "to Rectangular bogie!");
-            }
-            this.cargo = cargo;
-        }
-
-        @Override
-        public String toString() {
-            return shape + " | Cargo: " +
-                    (cargo != null ? cargo : "None");
-        }
-    }
-
-    // ─────────────────────────────────────────
-    // Safe assignment method with
-    // try-catch-finally
-    // ─────────────────────────────────────────
-    static void attemptCargoAssignment(GoodsBogie bogie,
-                                       String cargo) {
-        System.out.println("\nAssigning '" + cargo +
-                "' to " + bogie.shape + " bogie...");
-        try {
-            bogie.assignCargo(cargo);
-            System.out.println("  Assignment successful.");
-        } catch (CargoSafetyException e) {
-            System.out.println("  CargoSafetyException: " +
-                    e.getMessage());
-        } finally {
-            System.out.println("  [LOG] Validation complete.");
-        }
-    }
-
-    // ─────────────────────────────────────────
-    // MAIN METHOD
-    // ─────────────────────────────────────────
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App ===");
-        System.out.println("UC15: Safe Cargo Assignment\n");
+        System.out.println("======================================");
+        System.out.println(" UC4 - Maintain Ordered Bogie Consist ");
+        System.out.println("======================================\n");
 
-        // Safe: Cylindrical + Petroleum
-        GoodsBogie cyl = new GoodsBogie("Cylindrical");
-        attemptCargoAssignment(cyl, "Petroleum");
-        System.out.println("  Status: " + cyl);
+        // Create a LinkedList
+        // LinkedList maintains insertion order and allows fast inserts
+        LinkedList<String> trainConsist = new LinkedList<>();
 
-        // Unsafe: Rectangular + Petroleum
-        GoodsBogie rect = new GoodsBogie("Rectangular");
-        attemptCargoAssignment(rect, "Petroleum");
-        System.out.println("  Status: " + rect);
+        // ---- Add bogies in sequence ----
+        // addLast() appends each bogie to the end of the train
+        trainConsist.addLast("Engine");
+        trainConsist.addLast("Sleeper");
+        trainConsist.addLast("AC");
+        trainConsist.addLast("Cargo");
+        trainConsist.addLast("Guard");
 
-        // Safe: Rectangular + Coal
-        GoodsBogie rect2 = new GoodsBogie("Rectangular");
-        attemptCargoAssignment(rect2, "Coal");
-        System.out.println("  Status: " + rect2);
+        System.out.println("Initial Train Consist:");
+        System.out.println(trainConsist);
 
-        System.out.println("\nProgram continues safely...");
+        // ---- Insert Pantry Car at position 2 ----
+        // add(index, element) places bogie between Sleeper and AC
+        trainConsist.add(2, "Pantry Car");
+
+        System.out.println("\nAfter Inserting 'Pantry Car' at position 2:");
+        System.out.println(trainConsist);
+
+        // ---- Remove first and last bogies ----
+        // removeFirst() detaches the locomotive (Engine)
+        // removeLast() detaches the rear guard coach
+        trainConsist.removeFirst();
+        trainConsist.removeLast();
+
+        System.out.println("\nAfter Removing First and Last Bogie:");
+        System.out.println(trainConsist);
+
+        System.out.println("\nUC4 ordered consist operations completed...");
     }
 }
