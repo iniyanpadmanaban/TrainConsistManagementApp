@@ -40,6 +40,7 @@ public class TrainConsistManagementApp {
             this.type     = type;
             this.capacity = capacity;
         }
+        return result;
     }
 
     // Reusable grouping method — used by main() and tests
